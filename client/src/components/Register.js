@@ -3,7 +3,7 @@ import { RootContext } from '../RootContext';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap'
 
 export default function Register(props) {
-    const url = `${process.env.SERVER_URI}/api/users/register`
+    const url = `http://fmp-server.herokuapp.com/api/users/register`
     const { setAuthenticated, setUser, setToken } = useContext(RootContext);
 
     const [registerInfo, setRegisterInfo] = useState({

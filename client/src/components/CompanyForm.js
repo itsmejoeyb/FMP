@@ -34,7 +34,7 @@ export default function CompanyForm(props) {
         setValidated(true)
 
         e.preventDefault()
-        fetch(`${process.env.SERVER_URI}/api/companies/new`, { method: 'POST', body: JSON.stringify(companyInfo), headers: { 'Content-Type': 'application/json', 'x-auth-token': token } })
+        fetch(`http://fmp-server.herokuapp.com/api/companies/new`, { method: 'POST', body: JSON.stringify(companyInfo), headers: { 'Content-Type': 'application/json', 'x-auth-token': token } })
             .then(res => res.json())
             .then(res => {
                 if (res.error) {

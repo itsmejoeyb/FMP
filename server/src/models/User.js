@@ -20,6 +20,9 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    companies: {
+        type: Array,
+    },
 }, {
     timestamps: true,
 })

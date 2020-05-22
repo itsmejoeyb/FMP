@@ -9,6 +9,10 @@ require('dotenv').config()
 const { notFound, errorHandler } = require('./middleware/middlewares')
 const users = require('./routes/users')
 const auth = require('./routes/auth')
+const companies = require('./routes/companies')
+const software = require('./routes/software')
+const features = require('./routes/features')
+
 const app = express()
 
 
@@ -16,6 +20,7 @@ mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
 })
 
 app.use(morgan('common'))
@@ -33,6 +38,9 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', users)
 app.use('/api/auth', auth)
+app.use('/api/companies', companies)
+app.use('/api/software', software)
+app.use('/api/features', features)
 
 app.use(notFound)
 app.use(errorHandler)

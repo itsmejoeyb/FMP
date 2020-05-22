@@ -49,12 +49,12 @@ router.post('/register', (req, res, next) => {
                             }
                         )
                     })
-                    .catch(error => {
-                        if(error.name === 'ValidationError') {
+                    .catch(err => {
+                        if(err.name === 'ValidationError') {
                             res.status(422)
-                            console.log(error)
+                            console.log(err)
                         }
-                        next(error)
+                        next(err)
                     }) 
                 })
             })

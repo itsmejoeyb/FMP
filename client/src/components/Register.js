@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { RootContext } from '../RootContext';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap'
 
 export default function Register(props) {
     const url = 'http://localhost:1389/api/users/register'
-    const { setAuthenticated, setUser } = useContext(RootContext);
+    const { setAuthenticated, setUser, setToken } = useContext(RootContext);
 
     const [registerInfo, setRegisterInfo] = useState({
         firstName: "",
@@ -13,8 +14,10 @@ export default function Register(props) {
     })
     const [errDeets, setErrorDeets] = useState({
         message: "",
-        data: ""
+        data: "",
+        error: false
     })
+    const [validated, setValidated] = useState(false)
 
     const handleChange = e => {
         setRegisterInfo({
@@ -24,20 +27,27 @@ export default function Register(props) {
     }
 
     const handleSubmit = e => {
+        const form = e.currentTarget
+        if (form.checkValidity() === false) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+        setValidated(true)
         e.preventDefault()
         fetch(url, { method: 'POST', body: JSON.stringify(registerInfo), headers: { 'Content-Type': 'application/json' } })
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
                     setErrorDeets({
-                        message: res.message
+                        message: res.message,
+                        error: true
                     })
                 }
                 else if (!res.error) {
                     setErrorDeets({ message: res.message })
                     setAuthenticated(true)
                     setUser(res.user)
-                    window.localStorage.setItem('token', res.token)
+                    setToken(res.token)
                     props.history.push('/dashboard')
                 }
             })
@@ -45,37 +55,77 @@ export default function Register(props) {
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1>Register</h1>
-            {errDeets.message ? <p>{errDeets.message}</p> : <div></div>}
-            <form onSubmit={handleSubmit} style={{width: '500px'}}>
-                <label htmlFor="firstName">First Name</label>
-                <input style={{ width: '100%', padding: '12px 20px', margin: '8px 0', display: 'inline-block', boxSizing: 'border-box' }}
-                    name="firstName"
-                    placeholder="John"
-                    value={registerInfo.firstName}
-                    onChange={handleChange} />
-                <label htmlFor="lastName">Last Name</label>
-                <input style={{ width: '100%', padding: '12px 20px', margin: '8px 0', display: 'inline-block', boxSizing: 'border-box' }}
-                    name="lastName"
-                    placeholder="Doe"
-                    value={registerInfo.lastName}
-                    onChange={handleChange} />
-                <label htmlFor="email">Email</label>
-                <input style={{ width: '100%', padding: '12px 20px', margin: '8px 0', display: 'inline-block', boxSizing: 'border-box' }}
-                    name="email"
-                    placeholder="email@example.com"
-                    value={registerInfo.email}
-                    onChange={handleChange} />
-                <label htmlFor="password">Password</label>
-                <input style={{ width: '100%', padding: '12px 20px', margin: '8px 0', display: 'inline-block', boxSizing: 'border-box' }}
-                    name="password"
-                    placeholder="Min 5 Characters"
-                    type="password"
-                    value={registerInfo.password}
-                    onChange={handleChange} />
-                <button type="submit" style={{ width: '100%', padding: '14px 20px', margin: '8px 0', boxSizing: 'border-box' }}>Register</button>
-            </form>
-        </div>
+        <Container>
+            <Row className="justify-content-center">
+                <Col md={12} className="text-center">
+                    <h1>Register</h1>
+                </Col>
+                <Col md={6}>
+                    <Form noValidate onSubmit={handleSubmit} validated={validated}>
+                        {errDeets.error ? <Col md={12}><Alert variant="danger">{errDeets.message}</Alert></Col> : <></>}
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="firstName">
+                                <Form.Label>First Name</Form.Label>
+                                <Form.Control
+                                    required
+                                    name="firstName"
+                                    placeholder="Enter first name"
+                                    value={registerInfo.firstName}
+                                    onChange={handleChange}
+                                />
+                                {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
+                                <Form.Control.Feedback type="invalid">Please enter your first name.</Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group as={Col} controlId="lastName">
+                                <Form.Label>Last Name</Form.Label>
+                                <Form.Control
+                                    required
+                                    name="lastName"
+                                    placeholder="Enter last name"
+                                    value={registerInfo.lastName}
+                                    onChange={handleChange}
+                                />
+                                {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
+                                <Form.Control.Feedback type="invalid">Please enter your last name.</Form.Control.Feedback>
+                            </Form.Group>
+                        </Form.Row>
+
+                        <Form.Group controlId="email">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control 
+                                required
+                                name="email"
+                                type="email" 
+                                placeholder="Enter email" 
+                                value={registerInfo.email}
+                                onChange={handleChange}
+                            />
+                            {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
+                            <Form.Control.Feedback type="invalid">Please enter your email.</Form.Control.Feedback>
+                            <Form.Text className="text-muted">
+                                We'll never share your email with anyone else.
+                            </Form.Text>
+                        </Form.Group>
+
+                        <Form.Group controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                required
+                                name='password'
+                                type="password"
+                                placeholder="Password"
+                                value={registerInfo.password}
+                                onChange={handleChange}
+                            />
+                            {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
+                            {<Form.Control.Feedback type="invalid">Please choose a password.</Form.Control.Feedback>}
+                        </Form.Group>
+
+                        <Button variant="dark" type="submit" className="justify-self-center">Register</Button>
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
     )
 }

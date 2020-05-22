@@ -3,7 +3,7 @@ import { RootContext } from '../RootContext'
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap'
 
 export default function Login(props) {
-    const url = `${process.env.SERVER_URI}/api/auth`
+    const url = `http://fmp-server.herokuapp.com/api/auth`
     const { setAuthenticated, setToken, setUser, user } = useContext(RootContext);
 
     const [authInfo, setAuthInfo] = useState({

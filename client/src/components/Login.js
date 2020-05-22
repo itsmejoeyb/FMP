@@ -3,7 +3,7 @@ import { RootContext } from '../RootContext'
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap'
 
 export default function Login(props) {
-    const url = 'http://localhost:1389/api/auth'
+    const url = `${process.env.SERVER_URI}/api/auth`
     const { setAuthenticated, setToken, setUser, user } = useContext(RootContext);
 
     const [authInfo, setAuthInfo] = useState({

@@ -27,7 +27,7 @@ export default function Dashboard(props) {
 
     useEffect(() => {
         ( async () => {
-            await asyncFetch('http://localhost:1389/api/companies','GET', token, 'user', user)
+            await asyncFetch(`${process.env.SERVER_URI}/api/companies`,'GET', token, 'user', user)
             .then(data => {
                 if(data.error) {
                     setExpired(true)

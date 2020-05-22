@@ -3,7 +3,7 @@ import { RootContext } from '../RootContext';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap'
 
 export default function Register(props) {
-    const url = 'http://localhost:1389/api/users/register'
+    const url = `${process.env.SERVER_URI}/api/users/register`
     const { setAuthenticated, setUser, setToken } = useContext(RootContext);
 
     const [registerInfo, setRegisterInfo] = useState({

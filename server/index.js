@@ -6,12 +6,12 @@ const mongoose = require('mongoose')
 
 require('dotenv').config()
 
-const { notFound, errorHandler } = require('./middleware/middlewares')
-const users = require('./routes/users')
-const auth = require('./routes/auth')
-const companies = require('./routes/companies')
-const software = require('./routes/software')
-const features = require('./routes/features')
+const { notFound, errorHandler } = require('./src/middleware/middlewares')
+const users = require('./src/routes/users')
+const auth = require('./src/routes/auth')
+const companies = require('./src/routes/companies')
+const software = require('./src/routes/software')
+const features = require('./src/routes/features')
 
 const app = express()
 
